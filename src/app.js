@@ -5,35 +5,9 @@ const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
-const { createLogger, format, transports } = require('winston');
 
+const { logInfo, logError } = require('./logger/index');
 const { INTERNAL_SERVER_ERROR, getStatusText } = require('http-status-codes');
-
-const logger = createLogger({
-  level: 'silly',
-  format: format.combine(format.colorize(), format.cli()),
-  transports: [
-    new transports.Console(),
-    new transports.File({
-      filename: 'log/error.log',
-      level: 'error',
-      format: format.combine(
-        format.uncolorize(),
-        format.timestamp(),
-        format.prettyPrint()
-      )
-    }),
-    new transports.File({
-      filename: 'log/info.log',
-      level: 'info',
-      format: format.combine(
-        format.uncolorize(),
-        format.timestamp(),
-        format.prettyPrint()
-      )
-    })
-  ]
-});
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -52,12 +26,8 @@ app.use('/', (req, res, next) => {
 
   const { body, url, query, method } = req;
 
-  logger.log({
-    message: `${method} ${url}`,
-    level: 'info',
-    timestamp: new Date(),
-    description: { url, body, query }
-  });
+  logInfo(`${method} ${url}`, { url, body, query });
+
   next();
 });
 
@@ -65,19 +35,22 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
-app.use((err, req, res) => {
+app.use((error, req, res) => {
   const { body, url, query } = req;
-
-  logger.log({
-    status: INTERNAL_SERVER_ERROR,
-    type: getStatusText(INTERNAL_SERVER_ERROR),
-    message: err.message,
-    level: 'error',
-    timestamp: new Date(),
-    description: { url, body, query }
-  });
-
+  logError(error, { url, body, query });
   res.status(INTERNAL_SERVER_ERROR).send(getStatusText(INTERNAL_SERVER_ERROR));
+});
+
+setTimeout(() => {
+  throw new Error('Oops!');
+}, 1500);
+
+process.on('uncaughtException', (error, origin) => {
+  logError(error, origin);
+});
+
+process.on('uncaughtExceptionMonitor', (error, origin) => {
+  logError(error, origin);
 });
 
 module.exports = app;
