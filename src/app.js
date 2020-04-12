@@ -5,7 +5,7 @@ const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
-
+const { PORT } = require('./common/config');
 const { logInfo, logError } = require('./logger/index');
 const { INTERNAL_SERVER_ERROR, getStatusText } = require('http-status-codes');
 
@@ -41,16 +41,24 @@ app.use((error, req, res) => {
   res.status(INTERNAL_SERVER_ERROR).send(getStatusText(INTERNAL_SERVER_ERROR));
 });
 
-setTimeout(() => {
-  throw new Error('Oops!');
-}, 1500);
-
 process.on('uncaughtException', (error, origin) => {
   logError(error, origin);
+  app.listen(PORT);
 });
 
 process.on('uncaughtExceptionMonitor', (error, origin) => {
   logError(error, origin);
+  app.listen(PORT);
 });
+
+process.on('unhandledRejection', reason => {
+  logError(reason, 'unhandledRejection');
+});
+
+// check Rejection
+// Promise.reject(Error('Oops! Rejection'));
+
+// ceck Exeption
+// throw Error('Oops! Exeption');
 
 module.exports = app;
