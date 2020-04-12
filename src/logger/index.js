@@ -28,11 +28,14 @@ const logger = createLogger({
 });
 
 const logError = (err, description = '') => {
+  const errorMessage = err.message || '';
+  const mess = ['Status', INTERNAL_SERVER_ERROR, err.message].join(' ');
   logger.log({
     level: 'error',
     status: INTERNAL_SERVER_ERROR,
     type: getStatusText(INTERNAL_SERVER_ERROR),
-    message: err.message,
+    errorMessage,
+    message: mess,
     timestamp: new Date(),
     description
   });

@@ -25,7 +25,6 @@ app.use('/', (req, res, next) => {
   }
 
   const { body, url, query, method } = req;
-
   logInfo(`${method} ${url}`, { url, body, query });
 
   next();
@@ -36,8 +35,7 @@ app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
 app.use((error, req, res) => {
-  const { body, url, query } = req;
-  logError(error, { url, body, query });
+  logError(error);
   res.status(INTERNAL_SERVER_ERROR).send(getStatusText(INTERNAL_SERVER_ERROR));
 });
 
@@ -55,10 +53,8 @@ process.on('unhandledRejection', reason => {
   logError(reason, 'unhandledRejection');
 });
 
-// check Rejection
-// Promise.reject(Error('Oops! Rejection'));
+// Promise.reject(Error('Oops! Rejection')); // check Rejection
 
-// ceck Exeption
-// throw Error('Oops! Exeption');
+// throw Error('Oops! Exeption'); // check Exeption
 
 module.exports = app;
