@@ -6,7 +6,7 @@ const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
 const { PORT } = require('./common/config');
-const { logInfo, logError } = require('./logger/index');
+const { logInfo, logError } = require('./logger');
 const { INTERNAL_SERVER_ERROR, getStatusText } = require('http-status-codes');
 
 const app = express();
