@@ -1,22 +1,9 @@
 const mongoose = require('mongoose');
 const { MONGO_CONNECTION_STRING } = require('../common/config');
 
-const boards = [
-  {
-    id: '0',
-    title: 'Board',
-    columns: []
-  }
-];
+const boards = [];
 const tasks = [];
-const users = [
-  {
-    id: '0',
-    name: 'User',
-    login: 'User',
-    password: 'User'
-  }
-];
+const users = [];
 
 const connectToDB = cb => {
   mongoose.connect(MONGO_CONNECTION_STRING, {

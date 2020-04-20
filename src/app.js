@@ -53,8 +53,4 @@ process.on('unhandledRejection', reason => {
   logError(reason, 'unhandledRejection');
 });
 
-// Promise.reject(Error('Oops! Rejection')); // check Rejection
-
-// throw Error('Oops! Exeption'); // check Exeption
-
 module.exports = app;

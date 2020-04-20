@@ -10,18 +10,9 @@ const taskSchema = new mongoose.Schema(
     title: String,
     order: Number,
     description: String,
-    userId: {
-      type: String,
-      default: ''
-    },
-    boardId: {
-      type: String,
-      default: ''
-    },
-    columnId: {
-      type: String,
-      default: ''
-    }
+    userId: String,
+    boardId: String,
+    columnId: String
   },
   { versionKey: false }
 );
