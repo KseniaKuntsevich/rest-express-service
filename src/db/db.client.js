@@ -1,10 +1,23 @@
 const mongoose = require('mongoose');
-const Board = require('../resources/boards/board.model');
-const User = require('../resources/users/user.model');
+// const Board = require('../resources/boards/board.memory.repository').save;
+// const serSave = require('../resources/users/user.memory.repository').save;
 
-const boards = [new Board({ title: 'Board', column: {} })];
+const boards = [
+  {
+    id: '0',
+    title: 'Board',
+    columns: []
+  }
+];
 const tasks = [];
-const users = [new User({ name: 'User', login: 'log', password: 'pass' })];
+const users = [
+  {
+    id: '0',
+    name: 'User',
+    login: 'User',
+    password: 'User'
+  }
+];
 
 const connectToDB = cb => {
   mongoose.connect(
@@ -17,11 +30,11 @@ const connectToDB = cb => {
 
   const db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', () => {
+  db.once('open', async () => {
     console.log("we're connected!");
-    db.dropDatabase();
-    users.forEach(user => user.save());
-    boards.forEach(board => board.save());
+    await db.dropDatabase();
+    // users.forEach(d => User.save(d));
+    // boards.forEach(d => Board.save(d));
     cb();
   });
 };

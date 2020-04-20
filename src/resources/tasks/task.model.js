@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema(
   {
-    id: {
+    _id: {
       type: String,
       default: uuid
     },
@@ -22,8 +22,8 @@ const taskSchema = new mongoose.Schema(
       type: String,
       default: ''
     }
-  }
-  // , { versionKey : false }
+  },
+  { versionKey: false }
 );
 
 taskSchema.statics.toResponse = task => {

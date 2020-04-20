@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  id: {
+  _id: {
     type: String,
     default: uuid
   },

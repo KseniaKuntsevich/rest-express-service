@@ -5,13 +5,15 @@ const tasksService = require('./task.service');
 router
   .route('/:boardId/tasks/')
   .get(async (req, res) => {
-    const task = await tasksService.getAll(req.params.boardId);
-    res.json(task);
+    const tasks = await tasksService.getAll(req.params.boardId);
+    res.status(200).json(tasks.map(Task.toResponse));
   })
   .post(async (req, res) => {
-    const task = new Task({ ...req.body, boardId: req.params.boardId });
-    await tasksService.save(task);
-    res.json(task);
+    const task = await tasksService.save({
+      ...req.body,
+      boardId: req.params.boardId
+    });
+    res.status(200).json(Task.toResponse(task));
   });
 
 router
@@ -21,16 +23,15 @@ router
     if (!task) {
       res.status(404).end();
     } else {
-      res.json(task);
+      res.status(200).json(Task.toResponse(task));
     }
   })
   .put(async (req, res) => {
-    const task = await tasksService.getById(req.params.boardId, req.params.id);
-    tasksService.update(task, req.body);
-    res.json(task);
+    const task = await tasksService.update(req.params.id, req.body);
+    res.status(200).json(Task.toResponse(task));
   })
   .delete(async (req, res) => {
-    tasksService.remove(req.params.boardId, req.params.id);
+    await tasksService.remove(req.params.boardId, req.params.id);
     res.status(204).end();
   });
 

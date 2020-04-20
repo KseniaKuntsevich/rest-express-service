@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 
 const boardSchema = new mongoose.Schema(
   {
-    id: {
+    _id: {
       type: String,
       default: uuid
     },
     title: String,
-    columns: Object
-  }
-  // , { versionKey : false }
+    columns: Array
+  },
+  { versionKey: false }
 );
 
 boardSchema.statics.toResponse = board => {

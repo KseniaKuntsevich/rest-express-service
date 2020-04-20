@@ -6,7 +6,7 @@ const save = data => tasksRepo.save(data);
 
 const getById = (boardId, id) => tasksRepo.getById(boardId, id);
 
-const update = (task, newData) => tasksRepo.update(task, newData);
+const update = (id, newData) => tasksRepo.update(id, newData);
 
 const remove = (boardId, id) => tasksRepo.remove(boardId, id);
 
