@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Board = require('../resources/boards/board.model');
 const User = require('../resources/users/user.model');
 
-const boards = [new Board()];
+const boards = [new Board({ title: 'Board', column: {} })];
 const tasks = [];
-const users = [new User({ name: 'user1', login: 'log', password: 'pass' })];
+const users = [new User({ name: 'User', login: 'log', password: 'pass' })];
 
 const connectToDB = cb => {
   mongoose.connect(
@@ -21,6 +21,7 @@ const connectToDB = cb => {
     console.log("we're connected!");
     db.dropDatabase();
     users.forEach(user => user.save());
+    boards.forEach(board => board.save());
     cb();
   });
 };

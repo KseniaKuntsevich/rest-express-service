@@ -13,7 +13,7 @@ const getById = async id => {
 };
 
 const update = async (user, newData) => {
-  return User.updateOne({ _id: newData.id }, Object.assign(user, newData));
+  return User.updateOne({ _id: newData.id }, newData);
 };
 
 const remove = async id => {

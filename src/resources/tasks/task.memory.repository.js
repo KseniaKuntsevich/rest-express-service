@@ -1,41 +1,31 @@
-const { tasks } = require('../../db/db.client');
+const Task = require('./task.model');
 
 const getAll = async boardId => {
-  return tasks.filter(task => task.boardId === boardId);
+  return Task.find({ boardId });
 };
 
 const save = async data => {
-  await tasks.push(data);
+  return Task.create(data);
 };
 
 const getById = async (boardId, id) => {
-  return tasks.find(task => task.id === id && boardId === task.boardId);
+  return Task.findOne({ _id: id, boardId });
 };
 
 const update = async (task, newData) => {
-  await Object.assign(task, newData);
+  return Task.updateOne({ _id: newData.id }, newData);
 };
 
 const remove = async (boardId, id) => {
-  const task = await getById(boardId, id);
-  const index = tasks.indexOf(task);
-  tasks.splice(index, 1);
+  return (await Task.deleteOne({ _id: id, boardId })).deleteCount;
 };
 
 const clearUser = async userId => {
-  tasks.forEach(task => {
-    if (task.userId === userId) {
-      task.userId = null;
-    }
-  });
+  return Task.deleteMany({ userId });
 };
 
 const clearBoard = async boardId => {
-  tasks.forEach(task => {
-    if (task.boardId === boardId) {
-      remove(boardId, task.id);
-    }
-  });
+  return Task.deleteMany({ boardId });
 };
 
 module.exports = {
